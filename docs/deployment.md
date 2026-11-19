@@ -3,7 +3,7 @@
 ## Componentes preparados
 
 - O frontend React/Vite pode ser publicado como SPA estática. `vercel.json` define o build do workspace e encaminha rotas profundas para `index.html`.
-- A API pode correr num serviço Node/container. O `Dockerfile` instala o workspace, gera o cliente Prisma e compila a API; o processo escuta em `0.0.0.0` e respeita `PORT` do alojamento.
+- A API pode correr num serviço Node/container. `apps/api/Dockerfile` instala o workspace, gera o cliente Prisma e compila a API; o processo escuta em `0.0.0.0` e respeita `PORT` do alojamento. O contexto de build deve ser a raiz do repositório, por exemplo `docker build -f apps/api/Dockerfile .`.
 - As migrações de produção são aplicadas separadamente com `pnpm --filter @roof-tech/api prisma:deploy` antes de encaminhar tráfego para a nova versão.
 - A API disponibiliza `GET /api/v1/health/ready` para verificar o processo e a ligação à base de dados.
 

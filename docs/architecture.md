@@ -84,4 +84,4 @@ Não há recuperação de palavra-passe, verificação de e-mail ou MFA. A gest�
 
 ## Próxima fase
 
-- Fase 8: a configuração de publicação está preparada em `docs/deployment.md`, `vercel.json` e `Dockerfile`. A publicação aguarda contas/serviços, domínios, PostgreSQL gerido e credenciais R2.
+- Fase 8: a configuração de publicação está preparada em `docs/deployment.md`, `vercel.json` e `apps/api/Dockerfile`. A publicação aguarda alojamento da API, PostgreSQL gerido, domínios e credenciais R2.
