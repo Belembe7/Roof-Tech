@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: roof-tech-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: roof_tech
+      POSTGRES_USER: rooftech_dev
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the root .env file}
+    ports:
+      - '127.0.0.1:55432:5432'
+    volumes:
+      - roof-tech-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U rooftech_dev -d roof_tech']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  roof-tech-postgres-data:
