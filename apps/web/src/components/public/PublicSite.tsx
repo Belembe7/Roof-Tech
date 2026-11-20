@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react'
+import { useState, type FormEvent, type ReactNode, type RefObject } from 'react'
 import {
   ArrowRight,
   Bath,
@@ -344,10 +344,12 @@ export function PropertyFilterPanel({
   params,
   onChange,
   onClear,
+  searchInputRef,
 }: {
   params: URLSearchParams
   onChange: (key: string, value: string) => void
   onClear: () => void
+  searchInputRef?: RefObject<HTMLInputElement | null>
 }) {
   return (
     <div className="filter-panel">
@@ -362,6 +364,7 @@ export function PropertyFilterPanel({
       <label className="filter-control">
         <span>Bairro ou zona</span>
         <input
+          ref={searchInputRef}
           value={params.get('q') ?? ''}
           onChange={(event) => onChange('q', event.target.value)}
           placeholder="Ex.: Polana"

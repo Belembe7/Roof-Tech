@@ -188,11 +188,6 @@
   letter-spacing: 0.17em;
   font-weight: 700;
 }
-.hero-kicker > span {
-  width: 27px;
-  height: 1px;
-  background: #df9b7e;
-}
 .home-hero h1 {
   max-width: 670px;
   margin: 22px 0 12px;

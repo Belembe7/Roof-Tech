@@ -1,4 +1,5 @@
 import { ArrowRight, Check, ChevronRight, House, MapPin, ShieldCheck } from 'lucide-react'
+import { motion } from 'motion/react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { demoProperties } from '../data/demo-properties'
@@ -31,16 +32,56 @@ export function HomePage() {
             fetchPriority="high"
           />
           <div className="home-hero__shade" />
-          <div className="home-hero__content">
-            <span className="hero-kicker">
-              <span /> ARRANDE COM MAIS CLAREZA
-            </span>
-            <h1>
+          <motion.div
+            className="home-hero__content"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.11, delayChildren: 0.08 } },
+            }}
+          >
+            <motion.span
+              className="hero-kicker"
+              variants={{
+                hidden: { opacity: 0, y: 12 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+              }}
+            >
+              ARRANDE COM MAIS CLAREZA
+            </motion.span>
+            <motion.h1
+              variants={{
+                hidden: { opacity: 0, y: 16 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+              }}
+            >
               Encontre o lugar certo para <em>si.</em>
-            </h1>
-            <p>Pesquise casas, apartamentos, quartos e dependências em Maputo.</p>
-            <SearchBar />
-            <div className="hero-quick-links" aria-label="Pesquisas rápidas">
+            </motion.h1>
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 14 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+              }}
+            >
+              Pesquise casas, apartamentos, quartos e dependências em Maputo.
+            </motion.p>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 14 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+              }}
+            >
+              <SearchBar />
+            </motion.div>
+            <motion.div
+              className="hero-quick-links"
+              aria-label="Pesquisas rápidas"
+              variants={{
+                hidden: { opacity: 0, y: 12 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+              }}
+            >
               <span>Explorar:</span>
               {['Apartamento', 'Moradia', 'Quarto'].map((type) => (
                 <Link key={type} to={`/pesquisa?type=${encodeURIComponent(type)}`}>
@@ -48,18 +89,31 @@ export function HomePage() {
                   <ChevronRight size={13} />
                 </Link>
               ))}
-            </div>
-            <small className="hero-photo-note">
+            </motion.div>
+            <motion.small
+              className="hero-photo-note"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+              }}
+            >
               {!heroImage || featured[0]?.isDemo
                 ? 'Fotografia ilustrativa'
                 : 'Fotografia do anúncio'}
-            </small>
-          </div>
+            </motion.small>
+          </motion.div>
         </section>
 
         <div className="home-content">
           {demoOnly && <DemoNotice />}
-          <section className="home-section home-section--listings" aria-labelledby="recent-heading">
+          <motion.section
+            className="home-section home-section--listings"
+            aria-labelledby="recent-heading"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.12 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
             <div className="section-heading-row">
               <div>
                 <span className="public-eyebrow">Anúncios recentes</span>
@@ -89,9 +143,16 @@ export function HomePage() {
             <Link className="mobile-see-all" to="/pesquisa">
               Ver todos os imóveis <ArrowRight size={16} />
             </Link>
-          </section>
+          </motion.section>
 
-          <section className="home-section category-section" aria-labelledby="category-heading">
+          <motion.section
+            className="home-section category-section"
+            aria-labelledby="category-heading"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.12 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
             <div className="section-heading-row">
               <div>
                 <span className="public-eyebrow">Comece pelo que procura</span>
@@ -136,9 +197,16 @@ export function HomePage() {
                 </Link>
               ))}
             </div>
-          </section>
+          </motion.section>
 
-          <section className="clarity-panel" id="como-funciona">
+          <motion.section
+            className="clarity-panel"
+            id="como-funciona"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
             <div className="clarity-panel__copy">
               <span className="public-eyebrow">A nossa forma de trabalhar</span>
               <h2>
@@ -183,7 +251,7 @@ export function HomePage() {
                 </div>
               </article>
             </div>
-          </section>
+          </motion.section>
           <p className="home-note">
             <ShieldCheck size={15} /> A página pública mostra o bairro, não a morada exacta.
             Confirme os detalhes e valores com o anunciante antes de qualquer pagamento.

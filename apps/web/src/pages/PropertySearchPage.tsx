@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { ArrowDownUp, Search, SlidersHorizontal } from 'lucide-react'
 import { useSearchParams } from 'react-router'
@@ -14,7 +14,8 @@ import {
 
 export function PropertySearchPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(true)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const params = useMemo(() => new URLSearchParams(searchParams), [searchParams])
   const requestQuery = toApiSearchParams(params).toString()
   const [debouncedRequest, setDebouncedRequest] = useState(requestQuery)
@@ -23,6 +24,10 @@ export function PropertySearchPage() {
     const timer = window.setTimeout(() => setDebouncedRequest(requestQuery), 250)
     return () => window.clearTimeout(timer)
   }, [requestQuery])
+
+  useEffect(() => {
+    searchInputRef.current?.focus({ preventScroll: true })
+  }, [])
 
   const isDebouncing = requestQuery !== debouncedRequest
   const query = useQuery({
@@ -55,7 +60,7 @@ export function PropertySearchPage() {
           {onlyDemo && <DemoNotice compact />}
           <div className="results-toolbar">
             <div>
-              <span className="results-count">
+              <span className="results-count" role="status" aria-live="polite" aria-atomic="true">
                 {pagination?.totalItems ?? (query.isPending ? '…' : 0)}
               </span>
               <span>
@@ -89,7 +94,7 @@ export function PropertySearchPage() {
               aria-expanded={mobileFiltersOpen}
               onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
             >
-              <SlidersHorizontal size={16} /> Filtros
+              <SlidersHorizontal size={16} /> {mobileFiltersOpen ? 'Fechar filtros' : 'Filtros'}
             </button>
           </div>
           <div className="search-layout">
@@ -97,7 +102,12 @@ export function PropertySearchPage() {
               className={`search-sidebar ${mobileFiltersOpen ? 'search-sidebar--open' : ''}`}
               aria-label="Filtros de pesquisa"
             >
-              <PropertyFilterPanel params={params} onChange={updateParam} onClear={clearFilters} />
+              <PropertyFilterPanel
+                params={params}
+                onChange={updateParam}
+                onClear={clearFilters}
+                searchInputRef={searchInputRef}
+              />
             </aside>
             <section
               className="search-results"
