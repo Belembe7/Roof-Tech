@@ -40,6 +40,8 @@ Os dados carregados nesta instalação são demonstrativos. A localização é a
 
 As fotografias demonstrativas são carregadas do Unsplash com variantes responsivas. A interface pública consulta os endpoints da API; a base de dados local continua preenchida apenas com anúncios demonstrativos.
 
+Se a API pública estiver indisponível ou ainda não devolver anúncios, o frontend usa o catálogo demonstrativo estático de `packages/shared` para mostrar a experiência pública. Esses exemplos continuam identificados como ilustrativos e não são enviados para a API nem representam imóveis reais.
+
 Na Fase 3, `GET /api/v1/properties` aceita `q`, `city`, `neighborhood`, `type` (`HOUSE`, `APARTMENT`, `ROOM`, `ANNEX`), `max`, `rooms`, `water`, `parking`, `security`, `available`, `sort`, `page` e `limit`. Também existem `GET /api/v1/properties/:slug` e `GET /api/v1/neighborhoods?city=maputo`. As respostas monetárias são strings decimais; os resultados assinalam `isDemo`, e registos demonstrativos são excluídos em produção.
 
 Na Fase 4, a interface disponibiliza `/entrar`, `/registar` e `/conta`. A API publica `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `GET /api/v1/auth/session`, `POST /api/v1/auth/logout`, `GET /api/v1/auth/me` e `PATCH /api/v1/auth/me`. O cookie de sessão é HttpOnly; o token CSRF fica apenas na memória da aplicação. Para produção, configure `WEB_ORIGIN` para a origem exacta do frontend e publique frontend/API no mesmo site para compatibilidade com o cookie `SameSite=Lax`.

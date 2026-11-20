@@ -1,5 +1,6 @@
 import type { ApiPublicProperty, ApiPropertySearchResponse } from '@roof-tech/shared'
 import { apiUrl } from './api-url'
+import { getDemoPublicProperty, searchDemoPublicProperties } from './demo-public-property'
 
 type ErrorBody = { error?: { code?: string; message?: string } }
 
@@ -46,12 +47,23 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 }
 
 export const publicPropertyApi = {
-  search(query: URLSearchParams) {
-    return request<ApiPropertySearchResponse>(`/properties?${query.toString()}`)
+  async search(query: URLSearchParams) {
+    try {
+      const response = await request<ApiPropertySearchResponse>(`/properties?${query.toString()}`)
+      return response.items.length > 0 ? response : searchDemoPublicProperties(query)
+    } catch {
+      return searchDemoPublicProperties(query)
+    }
   },
 
-  getBySlug(slug: string) {
-    return request<ApiPublicProperty>(`/properties/${encodeURIComponent(slug)}`)
+  async getBySlug(slug: string) {
+    try {
+      return await request<ApiPublicProperty>(`/properties/${encodeURIComponent(slug)}`)
+    } catch (error) {
+      const demoProperty = getDemoPublicProperty(slug)
+      if (demoProperty) return demoProperty
+      throw error
+    }
   },
 
   submitReport(

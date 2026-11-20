@@ -35,7 +35,7 @@ Configure o health check do serviço para `/api/v1/health/ready`. O container n�
 4. Criar uma conta `ADMIN` com `ROOFTECH_ALLOW_ADMIN_BOOTSTRAP=true` apenas durante a operação controlada; remover a variável depois.
 5. Definir `VITE_API_URL` na Vercel, publicar o frontend e validar saúde, sessão, uploads públicos e download privado de documentos.
 
-A seed contém anúncios demonstrativos e recusa correr com `NODE_ENV=production`; anúncios demonstrativos também são ocultados pela pesquisa em produção. A base de dados publicada começa sem anúncios até serem submetidos e aprovados anúncios reais. Fotografias guardadas no disco local de desenvolvimento não são transferidas para R2 automaticamente.
+A seed contém anúncios demonstrativos e recusa correr com `NODE_ENV=production`; anúncios demonstrativos também são ocultados pela pesquisa em produção. A base de dados publicada começa sem anúncios até serem submetidos e aprovados anúncios reais. Se a API pública estiver indisponível ou não devolver anúncios, o frontend mostra o catálogo demonstrativo estático do pacote partilhado, sempre marcado como ilustrativo. Fotografias guardadas no disco local de desenvolvimento não são transferidas para R2 automaticamente.
 
 ## Estado e dependências externas
 
