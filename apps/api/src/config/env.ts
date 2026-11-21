@@ -8,8 +8,14 @@ const environmentSchema = z
       z.coerce.number().int().min(1).max(65_535).default(4000),
     ),
     DATABASE_URL: z.string().url(),
+    DATABASE_URL_POOLED: z.preprocess(
+      (value) => (value === '' ? undefined : value),
+      z.string().url().optional(),
+    ),
     WEB_ORIGIN: z.string().url().optional(),
-    STORAGE_PROVIDER: z.enum(['local', 'r2']).default('local'),
+    STORAGE_PROVIDER: z
+      .enum(['local', 'r2', 'disabled'])
+      .default(process.env.NODE_ENV === 'production' ? 'disabled' : 'local'),
     R2_ENDPOINT: z.preprocess(
       (value) => (value === '' ? undefined : value),
       z.string().url().optional(),
@@ -43,7 +49,7 @@ const environmentSchema = z
         message: 'WEB_ORIGIN é obrigatório em produção.',
       })
     }
-    if (values.NODE_ENV === 'production' && values.STORAGE_PROVIDER !== 'r2') {
+    if (values.NODE_ENV === 'production' && values.STORAGE_PROVIDER === 'local') {
       context.addIssue({
         code: 'custom',
         path: ['STORAGE_PROVIDER'],

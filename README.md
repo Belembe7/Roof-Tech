@@ -34,7 +34,7 @@ O PostgreSQL da Roof Tech fica limitado a `127.0.0.1:55432` e usa um volume Dock
 - **Fase 5 — Anunciantes:** painel, gestão de anúncios, disponibilidade, verificação e uploads privados/públicos.
 - **Fase 6 — Administração:** painel protegido, moderação de anúncios, revisão de documentos, denúncias, estado de contas e auditoria.
 - **Fase 7 — Integração pública (concluída):** página inicial, pesquisa e detalhes ligados à API, com estados de carregamento, erro e ausência de resultados.
-- **Fase 8 — Hospedagem (preparada; publicação pendente):** configuração de SPA estática, container da API, variáveis de produção e migração.
+- **Fase 8 — Hospedagem (Vercel):** frontend e API no mesmo domínio, Prisma Postgres ligado a Production e migrações aplicadas; uploads aguardam configuração de R2.
 
 Os dados carregados nesta instalação são demonstrativos. A localização é aproximada e os cartões indicam esse estado. Não há números de contacto reais e os favoritos estão desactivados.
 

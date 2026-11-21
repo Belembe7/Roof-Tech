@@ -69,6 +69,7 @@ function localPathFor(area: StorageArea, key: string) {
 export const objectStorage = {
   publicUrl(key: string) {
     validateKey(key)
+    if (env.STORAGE_PROVIDER === 'disabled') throw new StorageUnavailableError()
     if (env.STORAGE_PROVIDER === 'local') {
       return `/api/v1/media/public/${key.split('/').map(encodeURIComponent).join('/')}`
     }
@@ -78,6 +79,7 @@ export const objectStorage = {
 
   async put(area: StorageArea, key: string, body: Buffer, contentType: string) {
     validateKey(key)
+    if (env.STORAGE_PROVIDER === 'disabled') throw new StorageUnavailableError()
     try {
       if (env.STORAGE_PROVIDER === 'r2') {
         await r2Client!.send(
@@ -105,6 +107,7 @@ export const objectStorage = {
 
   async getPrivate(key: string) {
     validateKey(key)
+    if (env.STORAGE_PROVIDER === 'disabled') throw new StorageUnavailableError()
     try {
       if (env.STORAGE_PROVIDER === 'r2') {
         const response = await r2Client!.send(
@@ -121,6 +124,7 @@ export const objectStorage = {
 
   async delete(area: StorageArea, key: string) {
     validateKey(key)
+    if (env.STORAGE_PROVIDER === 'disabled') throw new StorageUnavailableError()
     try {
       if (env.STORAGE_PROVIDER === 'r2') {
         await r2Client!.send(new DeleteObjectCommand({ Bucket: bucketFor(area), Key: key }))
