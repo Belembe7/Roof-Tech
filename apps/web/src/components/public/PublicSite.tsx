@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ReactNode, type RefObject } from 'react'
 import {
   ArrowRight,
+  ArrowLeft,
   Bath,
   BedDouble,
   Check,
@@ -18,7 +19,7 @@ import {
   UserRound,
   X,
 } from 'lucide-react'
-import { Link, NavLink, useNavigate } from 'react-router'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router'
 import { useAuth } from '../../contexts/use-auth'
 import { formatMeticais } from '../../data/demo-properties'
 import { apiPropertyTypeFromQuery, imageSrcSet, type PublicListing } from '../../utils/public-utils'
@@ -39,6 +40,17 @@ export function DemoNotice({ compact = false }: { compact?: boolean }) {
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { status, user } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const showBack = location.pathname !== '/'
+  const goBack = () => {
+    const historyIndex = window.history.state?.idx
+    if (typeof historyIndex === 'number' && historyIndex > 0) {
+      navigate(-1)
+      return
+    }
+    navigate(location.pathname.startsWith('/imoveis/') ? '/pesquisa' : '/')
+  }
   const accountPath =
     status === 'authenticated' && user?.role === 'ADVERTISER'
       ? '/anunciante'
@@ -58,6 +70,12 @@ export function SiteHeader() {
               <small>IMÓVEIS COM CLAREZA</small>
             </span>
           </Link>
+          {showBack && (
+            <button className="header-back-link" type="button" onClick={goBack}>
+              <ArrowLeft size={16} aria-hidden="true" />
+              <span>Voltar</span>
+            </button>
+          )}
           <nav
             className={`public-nav ${menuOpen ? 'public-nav--open' : ''}`}
             aria-label="Navegação principal"
@@ -68,7 +86,6 @@ export function SiteHeader() {
             <a href="#como-funciona" onClick={() => setMenuOpen(false)}>
               Como funciona
             </a>
-            <span className="nav-demo-label">Pré-visualização</span>
           </nav>
           <button
             className="menu-toggle"
@@ -174,11 +191,29 @@ export function SearchBar({
   compact?: boolean
 }) {
   const [query, setQuery] = useState(initialQuery)
+  const [selectedType, setSelectedType] = useState('')
   const navigate = useNavigate()
+  const propertyTypes = [
+    { value: '', label: 'Todos os tipos' },
+    { value: 'APARTMENT', label: 'Apartamento' },
+    { value: 'HOUSE', label: 'Moradia' },
+    { value: 'ROOM', label: 'Quarto' },
+    { value: 'ANNEX', label: 'Dependência' },
+  ]
+  const applyType = (value: string) => {
+    setSelectedType(value)
+    const details = document.querySelector<HTMLDetailsElement>('.public-search__select[open]')
+    if (details) details.open = false
+    const params = new URLSearchParams()
+    if (value) params.set('type', value)
+    if (query.trim()) params.set('q', query.trim())
+    navigate(`/pesquisa${params.size ? `?${params.toString()}` : ''}`)
+  }
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const params = new URLSearchParams()
     if (query.trim()) params.set('q', query.trim())
+    if (selectedType) params.set('type', selectedType)
     navigate(`/pesquisa${params.size ? `?${params.toString()}` : ''}`)
   }
 
@@ -199,26 +234,25 @@ export function SearchBar({
         />
       </label>
       {!compact && (
-        <label className="public-search__select">
-          <span>Tipo</span>
-          <select
-            aria-label="Tipo de imóvel"
-            onChange={(event) => {
-              if (event.target.value)
-                navigate(
-                  `/pesquisa?type=${encodeURIComponent(event.target.value)}${query.trim() ? `&q=${encodeURIComponent(query.trim())}` : ''}`,
-                )
-            }}
-            defaultValue=""
-          >
-            <option value="">Todos os tipos</option>
-            <option value="APARTMENT">Apartamento</option>
-            <option value="HOUSE">Moradia</option>
-            <option value="ROOM">Quarto</option>
-            <option value="ANNEX">Dependência</option>
-          </select>
-          <ChevronDown size={15} aria-hidden="true" />
-        </label>
+        <details className="public-search__select">
+          <summary aria-label="Escolher tipo de imóvel">
+            <span>Tipo</span>
+            <strong>{propertyTypes.find((type) => type.value === selectedType)?.label}</strong>
+            <ChevronDown size={15} aria-hidden="true" />
+          </summary>
+          <div className="public-search__type-menu" role="group" aria-label="Tipos de imóvel">
+            {propertyTypes.map((type) => (
+              <button
+                key={type.value || 'all'}
+                type="button"
+                aria-pressed={selectedType === type.value}
+                onClick={() => applyType(type.value)}
+              >
+                {type.label}
+              </button>
+            ))}
+          </div>
+        </details>
       )}
       <button className="public-search__submit" type="submit">
         <Search size={17} aria-hidden="true" />
