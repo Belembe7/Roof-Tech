@@ -91,29 +91,6 @@
 .public-nav > a.active {
   color: #b65f45;
 }
-.header-back-link {
-  height: 40px;
-  padding: 0 11px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  color: #57514b !important;
-  background: transparent;
-  border: 1px solid #c7b6a7;
-  border-radius: 3px;
-  font-size: 11px;
-  font-weight: 650;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    background 0.18s,
-    border-color 0.18s;
-}
-.header-back-link:hover {
-  background: #f3ece3;
-  border-color: #b65f45;
-}
 .header-search-link {
   height: 40px;
   padding: 0 15px;
@@ -1646,16 +1623,6 @@
     padding: 13px 0;
     border-bottom: 1px solid #eee8e0;
     font-size: 12px;
-  }
-  .header-back-link {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    flex: 0 0 36px;
-    border-radius: 50%;
-  }
-  .header-back-link span {
-    display: none;
   }
   .menu-scrim {
     position: fixed;

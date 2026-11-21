@@ -1,7 +1,6 @@
 import { useState, type FormEvent, type ReactNode, type RefObject } from 'react'
 import {
   ArrowRight,
-  ArrowLeft,
   Bath,
   BedDouble,
   Check,
@@ -19,7 +18,7 @@ import {
   UserRound,
   X,
 } from 'lucide-react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router'
+import { Link, NavLink, useNavigate } from 'react-router'
 import { useAuth } from '../../contexts/use-auth'
 import { formatMeticais } from '../../data/demo-properties'
 import { apiPropertyTypeFromQuery, imageSrcSet, type PublicListing } from '../../utils/public-utils'
@@ -40,17 +39,6 @@ export function DemoNotice({ compact = false }: { compact?: boolean }) {
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { status, user } = useAuth()
-  const location = useLocation()
-  const navigate = useNavigate()
-  const showBack = location.pathname !== '/'
-  const goBack = () => {
-    const historyIndex = window.history.state?.idx
-    if (typeof historyIndex === 'number' && historyIndex > 0) {
-      navigate(-1)
-      return
-    }
-    navigate(location.pathname.startsWith('/imoveis/') ? '/pesquisa' : '/')
-  }
   const accountPath =
     status === 'authenticated' && user?.role === 'ADVERTISER'
       ? '/anunciante'
@@ -70,12 +58,6 @@ export function SiteHeader() {
               <small>IMÓVEIS COM CLAREZA</small>
             </span>
           </Link>
-          {showBack && (
-            <button className="header-back-link" type="button" onClick={goBack}>
-              <ArrowLeft size={16} aria-hidden="true" />
-              <span>Voltar</span>
-            </button>
-          )}
           <nav
             className={`public-nav ${menuOpen ? 'public-nav--open' : ''}`}
             aria-label="Navegação principal"
